@@ -155,24 +155,54 @@ async function kurk() {
   }
 
   console.log('\nKuriu skelbimo turini...');
-  const cr = await call(`${ACT}/adcreatives`, {
-    method: 'POST',
-    body: {
-      name: 'organizatoriai - sasaja telefone 1x1',
-      object_story_spec: spec,
-      degrees_of_freedom_spec: {
-        creative_features_spec: { standard_enhancements: { enroll_status: 'OPT_OUT' } },
-      },
+
+  // Vaizdas piestas specialiai, tad Meta patobulinimu nereikia - jie karpo,
+  // filtruoja ir perrasineja. Bendras `standard_enhancements` jungiklis
+  // nebegalioja (subcode 3858504), tad isjungiama po viena.
+  const BE_PATOBULINIMU = {
+    creative_features_spec: {
+      image_touchups: { enroll_status: 'OPT_OUT' },
+      image_brightness_and_contrast: { enroll_status: 'OPT_OUT' },
+      text_generation: { enroll_status: 'OPT_OUT' },
+      enhance_cta: { enroll_status: 'OPT_OUT' },
     },
+  };
+
+  const PAV = 'organizatoriai - sasaja telefone 1x1';
+
+  const kunas = (dof) => ({
+    name: PAV,
+    object_story_spec: spec,
+    ...(dof ? { degrees_of_freedom_spec: dof } : {}),
   });
+
+  // Meta prie pavadinimo prikabina savo priesaga, tad lyginam pradzia. Be sito
+  // kiekvienas pakartotinis paleidimas paliktu dar viena turinio kopija.
+  const esami = await call(`${ACT}/adcreatives`, { params: { fields: 'id,name', limit: '100' } });
+  const jau = (esami.j?.data || []).find((x) => (x.name || '').startsWith(PAV));
+
+  let cr = jau
+    ? { ok: true, j: jau }
+    : await call(`${ACT}/adcreatives`, { method: 'POST', body: kunas(BE_PATOBULINIMU) });
+  if (jau) console.log(`Turinys jau buvo sukurtas: ${jau.id} - naudoju ji, naujo nekuriu.`);
+  else if (!cr.ok) {
+    // Jei Meta nepriima kurio nors atskiro jungiklio, geriau turini sukurti be to
+    // skyriaus, nei nesukurti visai - patobulinimus dar galima isjungti ranka.
+    console.log('Su isjungtais patobulinimais nepavyko - bandau be to skyriaus.');
+    console.log(eil(cr.j?.error || cr.j));
+    cr = await call(`${ACT}/adcreatives`, { method: 'POST', body: kunas(null) });
+    if (cr.ok) {
+      console.log('Pavyko BE patobulinimu skyriaus. Ads Manager\'yje patikrink,');
+      console.log('ar Advantage+ creative jungikliai isjungti.');
+    }
+  }
   if (!cr.ok) {
     console.error('\nTURINIO SUKURTI NEPAVYKO:');
     console.error(eil(cr.j?.error || cr.j));
-    console.error('\nJei klaidoje minima programele arba leidimai - reiskia,');
-    console.error('kad "Litchidev Page Manager" vis dar Development busenoje.');
     stok(1);
   }
-  console.log(`Turinys sukurtas: ${cr.j.id}`);
+  const crId = cr.j.id;
+  if (!jau) console.log(`Turinys sukurtas: ${crId}`);
 
   const as = await call(`${CAMPAIGN}/adsets`, {
     params: { fields: 'id,name,effective_status,targeting', limit: '25' },
@@ -190,9 +220,9 @@ async function kurk() {
   const ad = await call(`${ACT}/ads`, {
     method: 'POST',
     body: {
-      name: 'organizatoriai - sasaja telefone 1x1',
+      name: PAV,
       adset_id: grupe.id,
-      creative: { creative_id: cr.j.id },
+      creative: { creative_id: crId },
       status: 'PAUSED',
     },
   });

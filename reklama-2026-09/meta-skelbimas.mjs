@@ -174,8 +174,13 @@ async function kurk() {
   }
   console.log(`Turinys sukurtas: ${cr.j.id}`);
 
-  const as = await call(`${CAMPAIGN}/adsets`, { params: { fields: 'id,name,effective_status', limit: '25' } });
-  const grupe = (as.j?.data || [])[0];
+  const as = await call(`${CAMPAIGN}/adsets`, {
+    params: { fields: 'id,name,effective_status,targeting', limit: '25' },
+  });
+  const visos = as.j?.data || [];
+  // Adresas dabar tinka abiem platformoms, tad skelbimas kabinamas ant grupes BE
+  // OS apribojimo. Jei tokios nera - imama pirma, bet tada verta paleisti `sutrauk`.
+  const grupe = visos.find((x) => !x.targeting?.user_os) || visos[0];
   if (!grupe) {
     console.error('Reklamu grupes nerasta - skelbimo pakabinti nera kur.');
     stok(1);
@@ -201,17 +206,40 @@ async function kurk() {
 }
 
 async function sutrauk() {
-  const as = await call(`${CAMPAIGN}/adsets`, { params: { fields: 'id,name,effective_status', limit: '25' } });
+  const as = await call(`${CAMPAIGN}/adsets`, {
+    params: { fields: 'id,name,status,effective_status,targeting', limit: '25' },
+  });
   const d = as.j?.data || [];
-  if (d.length < 2) {
-    console.log('Grupiu maziau nei dvi - traukti nera ko.');
+  if (!d.length) {
+    console.log('Grupiu nera.');
     return;
   }
-  for (const s of d.slice(1)) {
-    const r = await call(s.id, { method: 'POST', body: { status: 'PAUSED' } });
-    console.log(`${s.id} ${s.name} -> ${r.ok ? 'SUSTABDYTA' : eil(r.j?.error || r.j)}`);
+
+  // Lieka Android grupe - tiesiog todel, kad Lietuvoje Android dalis didesne.
+  // Nuo jos nuimamas OS apribojimas: adresas dabar tinka abiem platformoms.
+  const lieka = d.find((x) => (x.targeting?.user_os || []).includes('Android')) || d[0];
+  const t = { ...(lieka.targeting || {}) };
+  delete t.user_os;
+
+  const r = await call(lieka.id, {
+    method: 'POST',
+    body: { name: 'Organizatoriai - visi irenginiai', targeting: t },
+  });
+  if (!r.ok) {
+    console.error(`Grupes pakeisti nepavyko: ${eil(r.j?.error || r.j)}`);
+    stok(1);
   }
-  console.log(`\nLieka viena: ${d[0].id} ${d[0].name}`);
+  console.log(`${lieka.id} -> "Organizatoriai - visi irenginiai", OS apribojimas nuimtas`);
+
+  for (const g of d.filter((x) => x.id !== lieka.id)) {
+    if (g.status === 'PAUSED') {
+      console.log(`${g.id} ${g.name} -> jau sustabdyta, nelieciu`);
+      continue;
+    }
+    const pr = await call(g.id, { method: 'POST', body: { status: 'PAUSED' } });
+    console.log(`${g.id} ${g.name} -> ${pr.ok ? 'SUSTABDYTA' : eil(pr.j?.error || pr.j)}`);
+  }
+  console.log('Nereikalingu grupiu NENAIKINU - tik sustabdau.');
 }
 
 async function main() {

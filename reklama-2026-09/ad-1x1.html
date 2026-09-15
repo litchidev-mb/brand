@@ -1,0 +1,228 @@
+<!doctype html><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>/* The app's own light tokens, verbatim (squadoo-app/src/theme/colors.ts + tokens.ts).
+   This page used to run a parallel invented palette: a WARM cream where the app is COOL, a
+   neutral charcoal where the brand colour belongs, and greys picked by eye. Two palettes in
+   one product is not a style choice, it is a bug you can see — and the giveaway was that the
+   app's real colours already existed on this page, but only inside the drawn phone.
+
+   It also fixes contrast at the root rather than patching it rule by rule. The old ink3 was
+   2.97:1 on the old cream and failed AA at every size it was used; the app's text3 clears it.
+   The old teal-deep never reached 4.5:1 either; accentText does.
+
+   NB: the phone mockup below keeps its own #0B0C0E / #15171B — those are the app's DARK
+   surfaces being depicted, not tokens of this page. Do not fold them into this block. */
+:root{
+  /* Puslapis sąmoningai vienos (šviesios) temos — tokenai tamsios neturi. color-scheme
+     pasako tai naršyklei, kad tamsioje OS temoje ji formų ir slinkties valdiklių nepieštų
+     tamsiai ant šviesaus fono. Tamsi tema — atskiras savininko sprendimas (landing-i18n#21). */
+  color-scheme:light;
+  --bg:#ECF0F4; --ink:#0C0F12; --ink2:#525A64; --ink3:#606974;
+  --teal:#11ACAD; --teal-deep:#087374; --teal-08:rgba(17,172,173,.08); --teal-11:rgba(17,172,173,.14);
+  --card:#FFFFFF; --line:#DCE2E8; --line2:#E2E7EC;
+  /* brandDeep, not a neutral charcoal: the closing band and the store buttons are the only
+     two places the second half of the brand can show up on this page. */
+  --dark:#0F2F3A; --radius:22px;
+}
+@keyframes fadeup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(17,172,173,.35)}100%{box-shadow:0 0 0 14px rgba(17,172,173,0)}}
+.lang a.on{background:var(--ink);color:#fff}
+.lang a.on:hover{color:#fff}
+/* Judesys baigtinis ir trumpesnis nei 5 s (WCAG 2.2.2): be pauzės valdiklio jokia automatinė
+   animacija negali suktis be galo — tas pats žemiau su .phone ir žemėlapio smeigtuku. */
+.badge i{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:ring 1.8s ease-out 2}
+/* ---------- phone mockup ---------- */
+.phone-zone{flex:0 1 auto;width:min(460px,100%);margin:0 auto;display:flex;justify-content:center;perspective:1400px;animation:fadeup .8s .15s ease both}
+/* Plaukiojimas (floaty) gyvena ant vidinio .phone, NE ant .phone-tilt: keyframe transform
+   perrašo bazinį 3D posūkį, tad baigtinei animacijai pasibaigus telefonas šoktelėdavo iš
+   plokščio į pasuktą be jokio perėjimo (e1d091f#0). .phone kito transform neturi. */
+.phone-tilt{transform:rotateY(-17deg) rotateX(5deg) rotate(2.5deg);transform-style:preserve-3d}
+.phone{animation:floaty 4.8s ease-in-out 1;width:300px;border-radius:46px;background:#101216;padding:10px;box-shadow:0 60px 90px -30px rgba(20,30,28,.45),0 24px 40px -20px rgba(20,30,28,.3),inset 0 0 0 2px #2A2D33}
+.screen{position:relative;border-radius:37px;overflow:hidden;background:#ECF0F4;height:610px}
+.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:88px;height:26px;border-radius:14px;background:#101216;z-index:40}
+.statusbar{display:flex;align-items:center;justify-content:space-between;padding:13px 22px 0;font-size:11.5px;font-weight:700;color:#0C0F12}
+.batt{display:flex;gap:4px;align-items:center}
+.appbar{padding:12px 15px 0;display:flex;align-items:center;justify-content:space-between}
+.loc{display:flex;align-items:center;gap:5px;font-weight:700;font-size:13px;color:#0C0F12}
+.appbar .btns{display:flex;align-items:center;gap:7px}
+.sqbtn{width:30px;height:30px;border-radius:8px;background:#F4F7FA;border:1px solid #E2E7EC;display:flex;align-items:center;justify-content:center}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font:700 9.5px 'Archivo',sans-serif;color:#fff}
+.h-title{padding:10px 15px 0;font:800 21px 'Archivo',sans-serif;letter-spacing:-.5px;color:#0C0F12}
+.checkin{display:flex;align-items:center;gap:8px;margin:10px 15px 0;padding:7px 8px;border-radius:12px;background:rgba(17,172,173,.07);border:1.5px solid rgba(17,172,173,.55)}
+.ciring{position:relative;width:26px;height:26px;flex-shrink:0}
+.ciring .dot{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.ciring .dot i{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.ci-name{display:block;font:800 11.5px 'Archivo',sans-serif;color:#0C0F12;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-sub{display:block;font-size:9.5px;font-weight:700;color:var(--teal-deep);margin-top:1px}
+.ci-btn{flex-shrink:0;display:flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:8px;background:var(--teal);color:#fff;font:800 10px 'Archivo',sans-serif}
+.seg{display:flex;margin:10px 15px 0;padding:3px;border-radius:11px;background:#E2E8EF;border:1px solid #DCE2E8}
+.seg span{flex:1;text-align:center;padding:6px 0;font-size:10.5px;font-weight:600;color:#59616A}
+.seg span.on{border-radius:8px;font-weight:700;background:#fff;color:#0C0F12;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.timeline{margin:13px 15px 0}
+.now-row{display:flex;align-items:center;margin-bottom:9px}
+.t-time{width:32px;flex-shrink:0;text-align:right;padding-right:10px}
+.t-dotcol{width:14px;flex-shrink:0;display:flex;justify-content:center}
+.now-row .t-time{font-size:8.5px;font-weight:800;color:#DF2E38}
+.now-dot{width:8px;height:8px;border-radius:50%;background:#DF2E38}
+.now-line{flex:1;margin-left:5px;display:flex;align-items:center;gap:5px}
+.now-line b{font-size:8.5px;font-weight:800;color:#DF2E38;letter-spacing:.5px}
+.now-line i{flex:1;height:1.5px;background:linear-gradient(90deg,#DF2E38,rgba(223,46,56,0))}
+.g-row{display:flex;align-items:flex-start;margin-bottom:10px}
+.g-row .t-time{padding-top:2px}
+.g-row .tt{display:block;font:800 12.5px 'Archivo',sans-serif;color:#0C0F12;letter-spacing:-.3px}
+.g-row .td{display:block;font-size:8px;color:#8A929D;margin-top:2px}
+.g-row .t-dotcol{padding-top:4px}
+.g-dot{width:9px;height:9px;border-radius:50%;background:#ECF0F4;border:2px solid #C3CBD3}
+.g-dot.hot{border-color:var(--teal)}
+.gcard{flex:1;min-width:0;margin-left:5px;display:block;background:#fff;border:1px solid #E2E7EC;border-radius:11px;padding:9px 10px;box-shadow:0 1px 3px rgba(15,20,26,.06)}
+.gcard.hot{border:1.5px solid rgba(17,172,173,.5)}
+.g-top{display:flex;align-items:center;justify-content:space-between}
+.g-fmt{display:flex;align-items:center;gap:5px;min-width:0;font:800 11.5px 'Archivo',sans-serif;color:#0C0F12}
+.youin{display:inline-flex;align-items:center;gap:3px;font:800 7.5px 'Hanken Grotesk',sans-serif;letter-spacing:.3px;color:var(--teal-deep);padding:2.5px 5px;border-radius:4px;background:rgba(17,172,173,.14);white-space:nowrap}
+.g-spots{flex-shrink:0;white-space:nowrap}
+.g-spots b{font:800 15px 'Archivo',sans-serif;color:var(--teal-deep);line-height:1}
+.g-spots span{font-size:8.5px;color:#8A929D;font-weight:600}
+.g-venue{display:flex;align-items:center;gap:4px;margin-top:6px}
+.g-venue .vn{flex:1;min-width:0;font-size:9.5px;color:#59616A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-skill{flex-shrink:0;font-size:8px;font-weight:600;color:#59616A;padding:2px 6px;border-radius:4px;background:#EDF1F5}
+.g-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.g-people{display:flex;align-items:center;gap:6px}
+.stack{display:flex;align-items:center;margin-left:4px}
+.chip{width:16px;height:16px;border-radius:50%;border:1.5px solid #fff;margin-left:-4px;display:flex;align-items:center;justify-content:center;font:700 6.5px 'Archivo',sans-serif;color:#fff}
+.g-going{font-size:9px;color:#0C0F12;font-weight:600}
+.g-price{font:800 9.5px 'Archivo',sans-serif;color:#0C0F12;padding:2px 7px;border-radius:6px;background:#EDF1F5}
+.navsvg{position:absolute;left:9px;right:9px;bottom:8px;width:calc(100% - 18px);height:auto;overflow:visible}
+.sheen{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 30%)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:100%;height:100%;overflow:hidden}
+  body{background:radial-gradient(120% 90% at 50% 0%,#14606B 0%,#0F2F3A 55%,#0A1F27 100%);
+       font-family:'Hanken Grotesk',system-ui,sans-serif;color:#fff;position:relative}
+  .glow{position:absolute;width:150%;height:150%;border-radius:50%;left:50%;transform:translateX(-50%);
+        background:radial-gradient(circle,rgba(17,172,173,.32) 0%,rgba(17,172,173,0) 60%)}
+  .wrap{position:relative;z-index:2;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+  .copy .word{height:46px;margin-bottom:30px}
+  .copy .word svg{height:46px;width:auto;display:block}
+  .copy h1{font-family:'Archivo',sans-serif;font-weight:900;line-height:1.02;letter-spacing:-1.5px}
+  .copy h1 em{font-style:normal;color:#2BD6D7}
+  .copy p{color:#C3D5DB;font-weight:500;line-height:1.38}
+  /* maketas reklamai: be pasukimo ir be animacijos */
+  .phone-tilt{transform:none!important;animation:none!important}
+  .phone{animation:none!important;transform:none!important;
+         box-shadow:0 44px 90px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.06)!important}
+  .phone-zone{animation:none!important;perspective:none!important;width:auto!important;margin:0!important}
+.wrap{flex-direction:row;padding:0 0 0 92px;gap:64px}
+          .copy{flex:1;max-width:48%}
+          .copy h1{font-size:64px} .copy p{font-size:26px;margin-top:24px}
+          .phone-zone{transform:scale(1.18)}</style>
+<div class="glow"></div>
+<div class="wrap">
+  <div class="copy">
+    <div class="word"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1665 410" fill="none"><path fill="#FFFFFF" d="M130.5 37c-45 4-76.3 23.9-87.8 55.7-11.1 30.8-2.2 62 23 79.9 15 10.8 31 15.3 78.8 22.4 39 5.7 49.5 9.8 55.8 21.5 3.1 5.7 3.1 19.2 0 25-7 13.2-21.8 19.2-49.3 20.2-35.1 1.2-60.2-7.2-80.8-27.1l-5.4-5.1-3.5 4c-1.9 2.2-8.9 10.4-15.4 18.2l-12 14.1 5 4.7c24.9 23.3 52.6 33.8 95.1 36 22.2 1.2 51.6-2.4 67-8.2 26.6-9.9 43.8-27.4 49.9-50.6 8.3-31.9-1.4-64.5-23.9-79.7-15.2-10.3-28.2-14-70.5-20-45.9-6.5-57.2-10.5-63.1-22.5-2.3-4.8-2.6-6.4-2.2-12 1.6-19.3 20.7-29.8 54.3-29.8 30.2 0 52 7.4 69.1 23.5l5.2 4.9 14-17.5 14-17.4-4.7-4.5c-24.3-23.4-52.3-34.3-93.1-36-5.8-.3-14.5-.1-19.5.3m240 68.7c-28.5 2.3-50.8 12.4-69 31.4-31.9 33.4-37.3 83.8-13.4 124.2 5.7 9.7 20.2 24.1 29.9 29.7 17.5 10.2 36.2 14.5 59.5 13.7 22.7-.8 37.6-5.3 53.1-16.2 3.6-2.5 6.7-4.5 6.9-4.5.3 0 .5 20.7.5 46v46l24.3-.2 24.2-.3.3-132.8.2-132.7h-48.9l-.3 8.5-.3 8.5-5.5-4.5c-6.6-5.5-19.2-11.9-27.5-14-6.9-1.7-21.3-3.6-26.5-3.3-1.9.1-5.3.3-7.5.5m31.3 44.8c12.2 2.8 24.1 10.6 31.7 20.7l4.5 6v57.3l-3.8 5c-16.9 22.3-53.8 29.3-80.5 15.3-12.8-6.7-23.8-21-26.6-34.6-1.8-8.6-1.4-21.8 1-30.2 2.9-10.4 6.3-16.4 13.9-24 15.3-15.4 36.3-20.8 59.8-15.5M831.5 106c-12 1-23.2 3.2-34 6.7-7.9 2.5-25 10.3-31.3 14.2L763 129l9.2 18.5c5.1 10.2 9.6 18.5 10 18.5s3.3-1.6 6.5-3.6c13.3-8.6 27.5-13.1 43.8-14 22.2-1.3 36 4.7 42.2 18.3 1.9 4.2 2.6 7.6 3 16.3l.6 11.1-2.4-.5c-6.7-1.6-24.2-3.7-35.6-4.2-53.9-2.7-87 18.5-89 57.1-1.6 29.9 16.2 51 48.2 57 12.5 2.4 35.8 1.6 46.5-1.4 8.4-2.5 19.6-8.2 26.8-13.7l4.7-3.6.5 8.4.5 8.3 24.3.3 24.2.2v-62.7c0-62-.4-70.3-3.6-82.8-7.2-28.3-32.4-47.1-66.9-49.9-4.4-.4-9.6-.8-11.5-1s-8 0-13.5.4m36.2 117.9 9.8 1.6.3 13.6.3 13.6-4.6 4.2c-8.9 8.2-21.8 12.3-39 12.4-23 .1-35-7.8-34.9-22.8 0-11.4 7.2-19.7 19.9-23 9.5-2.4 32.4-2.2 48.2.4M528 171.2c0 34.3.5 65.1 1 70 3 25.7 16.1 45 37.5 55.3 12.8 6.2 19.5 7.6 37.1 8.2 26.5.9 41.8-3.7 59.5-17.9l5.9-4.8v20l25.8-.2 25.7-.3.3-95.8.2-95.7h-52v122.7l-4 6.1C654.6 255 641.1 262 620.3 262c-20.2 0-32.1-7.6-38.6-24.8-2.1-5.6-2.2-6.9-2.5-66.5l-.3-60.7H528z"></path><path fill="#11ACAD" d="M1122 83.7v44.7l-2.7-2.5c-12.7-11.6-27.7-17.9-47.2-20-24.9-2.6-52.8 4.8-72.3 19.2-9.5 7.1-22.4 21.2-27.9 30.5-15.3 25.8-17.7 58.1-6.5 87.8 7.7 20.5 25.8 40.5 45.6 50.6 13.5 6.9 31.9 11 49 11 23 0 38.8-5.1 56.1-18.3 2.7-2 5.2-3.7 5.4-3.7.3 0 .5 4.3.5 9.5v9.5h48.6V170.8l-.1-131.3-24.2-.3-24.3-.2zm-31.9 68.2c7.6 2.4 19.7 10.1 25 15.7 7.3 7.9 6.9 5.7 6.9 38.6v29.7l-4.3 5.3c-20.7 25.6-68.9 27.9-92.2 4.4-16.4-16.5-20.1-44.5-9-67.3 6.1-12.4 21.3-24.3 35.7-27.9 8.2-2.1 29.6-1.2 37.9 1.5m194.7-45.9c-36.2 4.6-66.1 25.5-82.2 57.7-12.5 25-12.2 57.9.9 84.8 12.1 25.1 33.3 43.4 60 51.8 26.3 8.2 61.2 5.9 84-5.6a98.8 98.8 0 0 0 51.1-63.4c9-35.2-.6-71.2-25.6-96.4-14.1-14.2-30.7-23.1-51-27.4-8.6-1.8-28.5-2.6-37.2-1.5m28.3 44.6c6.8 2 12.2 4.8 17.6 8.9 26 19.8 28.6 64.1 5.2 87.4-15.7 15.7-41.1 19.6-61.8 9.5-29.9-14.7-39.6-56.9-19.6-84.9 7.3-10.3 18-17.8 29.8-21 7.2-1.9 22.1-1.9 28.8.1m201.9-44.5c-9.1 1.2-23.1 5.3-31.9 9.5-27.6 13-47.6 37.1-55.4 66.9-2.8 11-3 33.4-.3 45 6.9 29.9 25.2 53.3 52.1 66.7 17.7 8.8 29.8 11.2 53.9 10.5 19.6-.6 25.2-1.6 40.1-7.6 42.9-17.3 67.8-65.4 58-112.1-6.8-32.3-29.5-59.5-60.1-71.9-17-6.9-37.5-9.5-56.4-7m30.1 44.5a51.7 51.7 0 0 1 31.9 26.8c6.7 13.5 8.3 25.6 5.5 40.3-5 26.6-26.6 44.3-54 44.3-23.2 0-44.9-17.3-50.9-40.6-3.8-15.2-2.6-28.3 4-42.3 6-12.9 20.2-24.9 33.5-28.5 7.5-2 23.2-2 30 0"></path></svg></div>
+    <h1>Paskelbk žaidimą.<br><em>Komanda susirinks pati.</em></h1>
+    <p>Aikštelė, laikas, kiek vietų — ir žmonės prisijungia patys. Be „kas eina?" dvidešimt kartų grupėje.</p>
+  </div>
+  <div class="phone-zone" aria-hidden="true">
+    <div class="phone-tilt">
+      <div class="phone">
+        <div class="screen">
+          <div class="notch"></div>
+          <div class="statusbar">
+            <span>18:42</span>
+            <span class="batt"><span style="width:14px;height:8px;border-radius:2px;background:#0C0F12;opacity:.85"></span><span style="width:18px;height:9px;border-radius:3px;border:1px solid rgba(12,15,18,.4);position:relative"><span style="position:absolute;inset:1px 4px 1px 1px;border-radius:1.5px;background:#0C0F12"></span></span></span>
+          </div>
+          <div class="appbar">
+            <span class="loc">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#087374" stroke-width="2"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>
+              Šeškinė
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#5C636B" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+            <span class="btns">
+              <span class="sqbtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#59616A" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span>
+              <span class="sqbtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#59616A" stroke-width="2"><path d="M4 8h11M19 8h1M4 16h5M13 16h7"/><circle cx="16" cy="8" r="2.2" fill="#F4F7FA"/><circle cx="10" cy="16" r="2.2" fill="#F4F7FA"/></svg></span>
+              <span class="avatar">KŽ</span>
+            </span>
+          </div>
+          <div class="h-title" data-i="mockTitle">Žaidimai šalia tavęs</div>
+          <div class="checkin">
+            <span class="ciring">
+              <svg width="26" height="26" viewBox="0 0 34 34"><circle cx="17" cy="17" r="15" fill="none" stroke="#E2E8EF" stroke-width="3.4"/><circle cx="17" cy="17" r="15" fill="none" stroke="#11ACAD" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="66 94" transform="rotate(-90 17 17)"/></svg>
+              <span class="dot"><i></i></span>
+            </span>
+            <span style="min-width:0;flex:1">
+              <span class="ci-name">Šeškinės aikštynas</span>
+              <span class="ci-sub" data-i="mockCiSub">19:00 · po 18 min · be svečių</span>
+            </span>
+            <span class="ci-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12l4 4 10-10"/></svg><span data-i="mockCheckIn">Atvykau</span></span>
+          </div>
+          <div class="seg"><span class="on" data-i="mockToday">Šiandien</span><span data-i="mockTomorrow">Rytoj</span><span data-i="mockWeek">Šią savaitę</span></div>
+          <div class="timeline">
+            <div class="now-row">
+              <span class="t-time">18:42</span>
+              <span class="t-dotcol"><span class="now-dot"></span></span>
+              <span class="now-line"><b data-i="mockNow">DABAR</b><i></i></span>
+            </div>
+            <div class="g-row">
+              <span class="t-time"><span class="tt">19:00</span><span class="td">90 min</span></span>
+              <span class="t-dotcol"><span class="g-dot hot"></span></span>
+              <span class="gcard hot">
+                <span class="g-top">
+                  <span class="g-fmt"><span data-i="mockG1">Futbolas · 6v6</span>&nbsp;<span class="youin"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4"><path d="M5 12l4 4 10-10"/></svg><span data-i="mockYouIn">TU ŽAIDI</span></span></span>
+                  <span class="g-spots"><b>1</b> <span data-i="mockSpotOne">vieta</span></span>
+                </span>
+                <span class="g-venue">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#8A929D" stroke-width="1.9" style="flex-shrink:0"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>
+                  <span class="vn" data-i="mockVenue1">Šeškinės aikštynas · 0,4 km</span><span class="g-skill" data-i="mockSkill">Laisvai</span>
+                </span>
+                <span class="g-foot">
+                  <span class="g-people">
+                    <span class="stack"><span class="chip" style="background:#5B8DEF">TS</span><span class="chip" style="background:#E58A3A">GA</span><span class="chip" style="background:#11ACAD">+9</span></span>
+                    <span class="g-going" data-i="mockGoing1">žaidžia 11</span>
+                  </span>
+                  <span class="g-price" data-i="mockFree">Nemokamai</span>
+                </span>
+              </span>
+            </div>
+            <div class="g-row">
+              <span class="t-time"><span class="tt">20:30</span><span class="td">60 min</span></span>
+              <span class="t-dotcol"><span class="g-dot"></span></span>
+              <span class="gcard">
+                <span class="g-top">
+                  <span class="g-fmt" data-i="mockG2">Krepšinis · 3x3</span>
+                  <span class="g-spots"><b>3</b> <span data-i="mockSpotMany">vietos</span></span>
+                </span>
+                <span class="g-venue">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#8A929D" stroke-width="1.9" style="flex-shrink:0"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>
+                  <span class="vn" data-i="mockVenue2">Žirmūnų aikštelė · 2,8 km</span><span class="g-skill" data-i="mockSkill">Laisvai</span>
+                </span>
+                <span class="g-foot">
+                  <span class="g-people">
+                    <span class="stack"><span class="chip" style="background:#9B6BD1">MK</span><span class="chip" style="background:#3AA55D">DP</span><span class="chip" style="background:#5B8DEF">+1</span></span>
+                    <span class="g-going" data-i="mockGoing2">žaidžia 3</span>
+                  </span>
+                  <span class="g-price">€2</span>
+                </span>
+              </span>
+            </div>
+          </div>
+          <svg class="navsvg" viewBox="0 0 392 112" aria-hidden="true">
+            <defs><filter id="lndnavsh" x="-30%" y="-60%" width="160%" height="240%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#0b0e14" flood-opacity="0.18"/></filter></defs>
+            <path filter="url(#lndnavsh)" fill="#FFFFFF" d="M 30 50 H 27.71 A 10 10 0 0 1 36.82 55.87 A 36 36 0 0 0 102.38 55.87 A 10 10 0 0 1 111.49 50 H 362 A 30 30 0 0 1 392 80 V 82 A 30 30 0 0 1 362 112 H 30 A 30 30 0 0 1 0 82 V 80 A 30 30 0 0 1 30 50 Z"/>
+            <circle cx="69.6" cy="41" r="29" fill="#FFFFFF" filter="url(#lndnavsh)"/>
+            <g fill="none" stroke="#11ACAD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(57.6 29)"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></g>
+            <text x="69.6" y="96" text-anchor="middle" fill="#11ACAD" style="font:800 11px 'Hanken Grotesk',sans-serif" data-i="mockTabHome">Pradžia</text>
+            <g fill="none" stroke="#5C636B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(120.8 61)"><path d="M9 5L4 7v12l5-2 6 2 5-2V5l-5 2-6-2z"/><path d="M9 5v12M15 7v12"/></g>
+            <text x="132.8" y="96" text-anchor="middle" fill="#5C636B" style="font:700 11px 'Hanken Grotesk',sans-serif" data-i="mockTabMap">Žemėlapis</text>
+            <g fill="none" stroke="#5C636B" stroke-width="2" stroke-linecap="round" transform="translate(184 61)"><circle cx="12" cy="12" r="9"/><path d="M12 8.5v7M8.5 12h7"/></g>
+            <text x="196" y="96" text-anchor="middle" fill="#5C636B" style="font:700 11px 'Hanken Grotesk',sans-serif" data-i="mockTabCreate">Kurti</text>
+            <g fill="none" stroke="#5C636B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(247.2 61)"><path d="M21 11.5a8 8 0 0 1-11.7 7L4 20l1.5-5.2A8 8 0 1 1 21 11.5z"/></g>
+            <text x="259.2" y="96" text-anchor="middle" fill="#5C636B" style="font:700 11px 'Hanken Grotesk',sans-serif" data-i="mockTabChat">Žinutės</text>
+            <g fill="none" stroke="#5C636B" stroke-width="2" stroke-linecap="round" transform="translate(310.4 61)"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></g>
+            <text x="322.4" y="96" text-anchor="middle" fill="#5C636B" style="font:700 11px 'Hanken Grotesk',sans-serif" data-i="mockTabProfile">Profilis</text>
+          </svg>
+          <div class="sheen"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,94 @@
+/* The app's own light tokens, verbatim (squadoo-app/src/theme/colors.ts + tokens.ts).
+   This page used to run a parallel invented palette: a WARM cream where the app is COOL, a
+   neutral charcoal where the brand colour belongs, and greys picked by eye. Two palettes in
+   one product is not a style choice, it is a bug you can see — and the giveaway was that the
+   app's real colours already existed on this page, but only inside the drawn phone.
+
+   It also fixes contrast at the root rather than patching it rule by rule. The old ink3 was
+   2.97:1 on the old cream and failed AA at every size it was used; the app's text3 clears it.
+   The old teal-deep never reached 4.5:1 either; accentText does.
+
+   NB: the phone mockup below keeps its own #0B0C0E / #15171B — those are the app's DARK
+   surfaces being depicted, not tokens of this page. Do not fold them into this block. */
+:root{
+  /* Puslapis sąmoningai vienos (šviesios) temos — tokenai tamsios neturi. color-scheme
+     pasako tai naršyklei, kad tamsioje OS temoje ji formų ir slinkties valdiklių nepieštų
+     tamsiai ant šviesaus fono. Tamsi tema — atskiras savininko sprendimas (landing-i18n#21). */
+  color-scheme:light;
+  --bg:#ECF0F4; --ink:#0C0F12; --ink2:#525A64; --ink3:#606974;
+  --teal:#11ACAD; --teal-deep:#087374; --teal-08:rgba(17,172,173,.08); --teal-11:rgba(17,172,173,.14);
+  --card:#FFFFFF; --line:#DCE2E8; --line2:#E2E7EC;
+  /* brandDeep, not a neutral charcoal: the closing band and the store buttons are the only
+     two places the second half of the brand can show up on this page. */
+  --dark:#0F2F3A; --radius:22px;
+}
+@keyframes fadeup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(17,172,173,.35)}100%{box-shadow:0 0 0 14px rgba(17,172,173,0)}}
+.lang a.on{background:var(--ink);color:#fff}
+.lang a.on:hover{color:#fff}
+/* Judesys baigtinis ir trumpesnis nei 5 s (WCAG 2.2.2): be pauzės valdiklio jokia automatinė
+   animacija negali suktis be galo — tas pats žemiau su .phone ir žemėlapio smeigtuku. */
+.badge i{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:ring 1.8s ease-out 2}
+/* ---------- phone mockup ---------- */
+.phone-zone{flex:0 1 auto;width:min(460px,100%);margin:0 auto;display:flex;justify-content:center;perspective:1400px;animation:fadeup .8s .15s ease both}
+/* Plaukiojimas (floaty) gyvena ant vidinio .phone, NE ant .phone-tilt: keyframe transform
+   perrašo bazinį 3D posūkį, tad baigtinei animacijai pasibaigus telefonas šoktelėdavo iš
+   plokščio į pasuktą be jokio perėjimo (e1d091f#0). .phone kito transform neturi. */
+.phone-tilt{transform:rotateY(-17deg) rotateX(5deg) rotate(2.5deg);transform-style:preserve-3d}
+.phone{animation:floaty 4.8s ease-in-out 1;width:300px;border-radius:46px;background:#101216;padding:10px;box-shadow:0 60px 90px -30px rgba(20,30,28,.45),0 24px 40px -20px rgba(20,30,28,.3),inset 0 0 0 2px #2A2D33}
+.screen{position:relative;border-radius:37px;overflow:hidden;background:#ECF0F4;height:610px}
+.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:88px;height:26px;border-radius:14px;background:#101216;z-index:40}
+.statusbar{display:flex;align-items:center;justify-content:space-between;padding:13px 22px 0;font-size:11.5px;font-weight:700;color:#0C0F12}
+.batt{display:flex;gap:4px;align-items:center}
+.appbar{padding:12px 15px 0;display:flex;align-items:center;justify-content:space-between}
+.loc{display:flex;align-items:center;gap:5px;font-weight:700;font-size:13px;color:#0C0F12}
+.appbar .btns{display:flex;align-items:center;gap:7px}
+.sqbtn{width:30px;height:30px;border-radius:8px;background:#F4F7FA;border:1px solid #E2E7EC;display:flex;align-items:center;justify-content:center}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font:700 9.5px 'Archivo',sans-serif;color:#fff}
+.h-title{padding:10px 15px 0;font:800 21px 'Archivo',sans-serif;letter-spacing:-.5px;color:#0C0F12}
+.checkin{display:flex;align-items:center;gap:8px;margin:10px 15px 0;padding:7px 8px;border-radius:12px;background:rgba(17,172,173,.07);border:1.5px solid rgba(17,172,173,.55)}
+.ciring{position:relative;width:26px;height:26px;flex-shrink:0}
+.ciring .dot{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.ciring .dot i{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.ci-name{display:block;font:800 11.5px 'Archivo',sans-serif;color:#0C0F12;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-sub{display:block;font-size:9.5px;font-weight:700;color:var(--teal-deep);margin-top:1px}
+.ci-btn{flex-shrink:0;display:flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:8px;background:var(--teal);color:#fff;font:800 10px 'Archivo',sans-serif}
+.seg{display:flex;margin:10px 15px 0;padding:3px;border-radius:11px;background:#E2E8EF;border:1px solid #DCE2E8}
+.seg span{flex:1;text-align:center;padding:6px 0;font-size:10.5px;font-weight:600;color:#59616A}
+.seg span.on{border-radius:8px;font-weight:700;background:#fff;color:#0C0F12;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.timeline{margin:13px 15px 0}
+.now-row{display:flex;align-items:center;margin-bottom:9px}
+.t-time{width:32px;flex-shrink:0;text-align:right;padding-right:10px}
+.t-dotcol{width:14px;flex-shrink:0;display:flex;justify-content:center}
+.now-row .t-time{font-size:8.5px;font-weight:800;color:#DF2E38}
+.now-dot{width:8px;height:8px;border-radius:50%;background:#DF2E38}
+.now-line{flex:1;margin-left:5px;display:flex;align-items:center;gap:5px}
+.now-line b{font-size:8.5px;font-weight:800;color:#DF2E38;letter-spacing:.5px}
+.now-line i{flex:1;height:1.5px;background:linear-gradient(90deg,#DF2E38,rgba(223,46,56,0))}
+.g-row{display:flex;align-items:flex-start;margin-bottom:10px}
+.g-row .t-time{padding-top:2px}
+.g-row .tt{display:block;font:800 12.5px 'Archivo',sans-serif;color:#0C0F12;letter-spacing:-.3px}
+.g-row .td{display:block;font-size:8px;color:#8A929D;margin-top:2px}
+.g-row .t-dotcol{padding-top:4px}
+.g-dot{width:9px;height:9px;border-radius:50%;background:#ECF0F4;border:2px solid #C3CBD3}
+.g-dot.hot{border-color:var(--teal)}
+.gcard{flex:1;min-width:0;margin-left:5px;display:block;background:#fff;border:1px solid #E2E7EC;border-radius:11px;padding:9px 10px;box-shadow:0 1px 3px rgba(15,20,26,.06)}
+.gcard.hot{border:1.5px solid rgba(17,172,173,.5)}
+.g-top{display:flex;align-items:center;justify-content:space-between}
+.g-fmt{display:flex;align-items:center;gap:5px;min-width:0;font:800 11.5px 'Archivo',sans-serif;color:#0C0F12}
+.youin{display:inline-flex;align-items:center;gap:3px;font:800 7.5px 'Hanken Grotesk',sans-serif;letter-spacing:.3px;color:var(--teal-deep);padding:2.5px 5px;border-radius:4px;background:rgba(17,172,173,.14);white-space:nowrap}
+.g-spots{flex-shrink:0;white-space:nowrap}
+.g-spots b{font:800 15px 'Archivo',sans-serif;color:var(--teal-deep);line-height:1}
+.g-spots span{font-size:8.5px;color:#8A929D;font-weight:600}
+.g-venue{display:flex;align-items:center;gap:4px;margin-top:6px}
+.g-venue .vn{flex:1;min-width:0;font-size:9.5px;color:#59616A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-skill{flex-shrink:0;font-size:8px;font-weight:600;color:#59616A;padding:2px 6px;border-radius:4px;background:#EDF1F5}
+.g-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.g-people{display:flex;align-items:center;gap:6px}
+.stack{display:flex;align-items:center;margin-left:4px}
+.chip{width:16px;height:16px;border-radius:50%;border:1.5px solid #fff;margin-left:-4px;display:flex;align-items:center;justify-content:center;font:700 6.5px 'Archivo',sans-serif;color:#fff}
+.g-going{font-size:9px;color:#0C0F12;font-weight:600}
+.g-price{font:800 9.5px 'Archivo',sans-serif;color:#0C0F12;padding:2px 7px;border-radius:6px;background:#EDF1F5}
+.navsvg{position:absolute;left:9px;right:9px;bottom:8px;width:calc(100% - 18px);height:auto;overflow:visible}
+.sheen{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 30%)}

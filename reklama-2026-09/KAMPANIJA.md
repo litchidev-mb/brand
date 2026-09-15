@@ -113,6 +113,38 @@ Failai vietoje ir teisingų proporcijų (patikrinta):
 | `app-1x1.png` | 1080×1080 |
 | `app-9x16.png` | 1080×1920 |
 
+### Arba per API — vienu paleidimu
+
+`meta-skelbimas.mjs` šiame aplanke padaro tą patį automatiškai. Raktas paduodamas per
+aplinkos kintamąjį ir **niekur neįrašomas**:
+
+```powershell
+$env:FB_TOKEN = "<prieigos raktas>"; node meta-skelbimas.mjs tikrink
+```
+
+`tikrink` nieko nekeičia — parodo kampaniją, grupes, skelbimus ir vaizdų biblioteką. Pirmiausia
+paleisk jį: iš jo iškart matysis, ar nuotrauka bibliotekoje, ir kiek grupių iš tikro yra.
+
+Kai vaizdas patvirtintas:
+
+```powershell
+node meta-skelbimas.mjs kurk
+```
+
+Sukuria turinį ir **sustabdytą** skelbimą. Nerasdamas vaizdo, įkelia `app-1x1.png` iš naujo pats.
+Jei Meta atmes dėl programėlės būsenos, klaidą atspausdins pažodžiui — tada matysis, ar
+*Development* tikrai yra priežastis, ar buvo kas kita.
+
+```powershell
+node meta-skelbimas.mjs sutrauk
+```
+
+Sustabdo nebereikalingas antrąsias grupes, palikdamas vieną.
+
+API versija parenkama savaime (patikrinta: **v24.0** gyva), bet `FB_API` ją perrašo.
+
+---
+
 ### Žingsniai
 
 1. Ads Manager → kampanija `organizatoriai` → reklamų grupė → **Create ad**
